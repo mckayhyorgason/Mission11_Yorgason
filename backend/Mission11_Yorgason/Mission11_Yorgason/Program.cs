@@ -4,25 +4,35 @@ using Mission11_Yorgason.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReact", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddDbContext<BooksContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("BookConnection"));
+    options.UseSqlite(builder.Configuration["ConnectionStrings:BookConnection"]);
 });
 
-// Configure the HTTP request pipeline.
+var app = builder.Build();
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowReact");
 
 app.UseAuthorization();
 

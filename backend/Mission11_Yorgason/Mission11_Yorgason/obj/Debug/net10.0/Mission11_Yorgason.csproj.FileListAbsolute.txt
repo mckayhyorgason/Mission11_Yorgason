@@ -147,3 +147,6 @@
 /Users/mckayyorgason/Desktop/BYU Classes Winter 2026/Enterprise Application Development/Mission Assignments/Mission11_Yorgason/backend/Mission11_Yorgason/Mission11_Yorgason/obj/Debug/net10.0/Mission11_Yorgason.pdb
 /Users/mckayyorgason/Desktop/BYU Classes Winter 2026/Enterprise Application Development/Mission Assignments/Mission11_Yorgason/backend/Mission11_Yorgason/Mission11_Yorgason/obj/Debug/net10.0/Mission11_Yorgason.genruntimeconfig.cache
 /Users/mckayyorgason/Desktop/BYU Classes Winter 2026/Enterprise Application Development/Mission Assignments/Mission11_Yorgason/backend/Mission11_Yorgason/Mission11_Yorgason/obj/Debug/net10.0/ref/Mission11_Yorgason.dll
+/Users/mckayyorgason/Desktop/BYU Classes Winter 2026/Enterprise Application Development/Mission Assignments/Mission11_Yorgason/backend/Mission11_Yorgason/Mission11_Yorgason/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/mckayyorgason/Desktop/BYU Classes Winter 2026/Enterprise Application Development/Mission Assignments/Mission11_Yorgason/backend/Mission11_Yorgason/Mission11_Yorgason/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/mckayyorgason/Desktop/BYU Classes Winter 2026/Enterprise Application Development/Mission Assignments/Mission11_Yorgason/backend/Mission11_Yorgason/Mission11_Yorgason/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
