@@ -7,6 +7,7 @@ function BookList() {
   const [books, setBooks] = useState<Book[]>([])
   const [pageNumber, setPageNumber] = useState(1)
   const [pageSize, setPageSize] = useState(5)
+  const [sortByTitle, setSortByTitle] = useState(true)
   const [totalCount, setTotalCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -20,7 +21,7 @@ function BookList() {
         const url = new URL(API_BASE_URL)
         url.searchParams.set('pageNumber', pageNumber.toString())
         url.searchParams.set('pageSize', pageSize.toString())
-        url.searchParams.set('sortByTitle', 'true')
+        url.searchParams.set('sortByTitle', sortByTitle ? 'true' : 'false')
 
         const response = await fetch(url.toString())
         if (!response.ok) {
@@ -40,7 +41,7 @@ function BookList() {
     }
 
     fetchBooks()
-  }, [pageNumber, pageSize])
+  }, [pageNumber, pageSize, sortByTitle])
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
 
@@ -67,6 +68,21 @@ function BookList() {
             <option value={5}>5</option>
             <option value={10}>10</option>
             <option value={15}>15</option>
+          </select>
+        </div>
+        <div className="d-flex align-items-center gap-2">
+          <label htmlFor="sortByTitle" className="form-label m-0">
+            Sort by title
+          </label>
+          <select
+            id="sortByTitle"
+            className="form-select"
+            style={{ width: 'auto' }}
+            value={sortByTitle ? 'true' : 'false'}
+            onChange={(e) => setSortByTitle(e.target.value === 'true')}
+          >
+            <option value="true">On</option>
+            <option value="false">Off</option>
           </select>
         </div>
       </div>
