@@ -20,11 +20,22 @@ public class BooksController : ControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 0,
         [FromQuery] bool sortByTitle = false,
-        [FromQuery] string? category = null)
+        [FromQuery] string? category = null,
+        [FromQuery] string[]? categories = null)
     {
         IQueryable<Book> query = _context.Books.AsNoTracking();
 
-        if (!string.IsNullOrWhiteSpace(category))
+        var categoryFilters = categories?
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Select(c => c.Trim())
+            .Distinct()
+            .ToArray();
+
+        if (categoryFilters is { Length: > 0 })
+        {
+            query = query.Where(b => categoryFilters.Contains(b.Category));
+        }
+        else if (!string.IsNullOrWhiteSpace(category))
         {
             query = query.Where(b => b.Category == category);
         }
