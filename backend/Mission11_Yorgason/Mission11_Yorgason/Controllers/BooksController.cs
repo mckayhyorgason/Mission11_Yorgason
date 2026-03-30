@@ -19,9 +19,15 @@ public class BooksController : ControllerBase
     public async Task<ActionResult<IEnumerable<Book>>> GetBooks(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 0,
-        [FromQuery] bool sortByTitle = false)
+        [FromQuery] bool sortByTitle = false,
+        [FromQuery] string? category = null)
     {
         IQueryable<Book> query = _context.Books.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(category))
+        {
+            query = query.Where(b => b.Category == category);
+        }
 
         if (sortByTitle)
         {
@@ -43,5 +49,18 @@ public class BooksController : ControllerBase
 
         var books = await query.ToListAsync();
         return Ok(books);
+    }
+
+    [HttpGet("categories")]
+    public async Task<ActionResult<IEnumerable<string>>> GetCategories()
+    {
+        var categories = await _context.Books
+            .AsNoTracking()
+            .Select(b => b.Category)
+            .Distinct()
+            .OrderBy(c => c)
+            .ToListAsync();
+
+        return Ok(categories);
     }
 }

@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react'
 import type { Book } from './types/book'
 
 const API_BASE_URL = 'http://localhost:5151/api/books'
+const CATEGORIES_URL = `${API_BASE_URL}/categories`
 
 function BookList() {
   const [books, setBooks] = useState<Book[]>([])
   const [pageNumber, setPageNumber] = useState(1)
   const [pageSize, setPageSize] = useState(5)
   const [sortByTitle, setSortByTitle] = useState(true)
+  const [categoryFilter, setCategoryFilter] = useState('All')
+  const [categories, setCategories] = useState<string[]>([])
   const [totalCount, setTotalCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -22,6 +25,9 @@ function BookList() {
         url.searchParams.set('pageNumber', pageNumber.toString())
         url.searchParams.set('pageSize', pageSize.toString())
         url.searchParams.set('sortByTitle', sortByTitle ? 'true' : 'false')
+        if (categoryFilter !== 'All') {
+          url.searchParams.set('category', categoryFilter)
+        }
 
         const response = await fetch(url.toString())
         if (!response.ok) {
@@ -41,13 +47,37 @@ function BookList() {
     }
 
     fetchBooks()
-  }, [pageNumber, pageSize, sortByTitle])
+  }, [pageNumber, pageSize, sortByTitle, categoryFilter])
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(CATEGORIES_URL)
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status}`)
+        }
+
+        const data = (await response.json()) as string[]
+        setCategories(data)
+      } catch (err) {
+        // Don't block the book list if categories fail to load.
+        setCategories([])
+      }
+    }
+
+    fetchCategories()
+  }, [])
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
 
   const handlePageSizeChange = (value: number) => {
     setPageNumber(1)
     setPageSize(value)
+  }
+
+  const handleCategoryChange = (value: string) => {
+    setPageNumber(1)
+    setCategoryFilter(value)
   }
 
   return (
@@ -83,6 +113,25 @@ function BookList() {
           >
             <option value="true">On</option>
             <option value="false">Off</option>
+          </select>
+        </div>
+        <div className="d-flex align-items-center gap-2">
+          <label htmlFor="categoryFilter" className="form-label m-0">
+            Category
+          </label>
+          <select
+            id="categoryFilter"
+            className="form-select"
+            style={{ width: 'auto' }}
+            value={categoryFilter}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+          >
+            <option value="All">All</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
         </div>
       </div>
