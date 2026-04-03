@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { Book } from '../types/book'
+import { API_BASE_URL, CATEGORIES_URL } from '../api'
 import { useCart } from '../CartContext'
-
-const API_BASE_URL = 'http://localhost:5151/api/books'
-const CATEGORIES_URL = `${API_BASE_URL}/categories`
+import type { Book } from '../types/book'
 
 type BookListProps = {
   pageNumber: number

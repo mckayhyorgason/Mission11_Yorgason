@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { API_BASE_URL } from '../api'
 import type { Book } from '../types/book'
-
-const API_BASE_URL = 'http://localhost:5151/api/books'
 
 type BookForm = Omit<Book, 'bookId'>
 

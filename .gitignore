@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+
+# Editor/IDE
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# .NET build outputs
+**/bin/
+**/obj/
+**/publish/
+*.pdb
+
+# SQLite databases
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
