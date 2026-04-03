@@ -12,7 +12,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReact", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "https://ashy-island-08fae7f10.7.azurestaticapps.net/")
+        policy.WithOrigins("http://localhost:5173", "https://ashy-island-08fae7f10.7.azurestaticapps.net")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .WithExposedHeaders("X-Total-Count");
