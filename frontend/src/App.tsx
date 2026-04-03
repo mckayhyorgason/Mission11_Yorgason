@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import { NavLink, Route, Routes } from 'react-router-dom'
 import './App.css'
-import BookList from './BookList'
-import CartPage from './CartPage'
+import AdminBooks from './pages/AdminBooks'
+import BookList from './pages/BookList'
+import CartPage from './pages/CartPage'
 import { CartProvider, useCart } from './CartContext'
 
 function App() {
-  const [view, setView] = useState<'list' | 'cart'>('list')
   const [pageNumber, setPageNumber] = useState(1)
   const [pageSize, setPageSize] = useState(5)
   const [sortByTitle, setSortByTitle] = useState(true)
@@ -28,54 +29,81 @@ function App() {
 
   return (
     <CartProvider>
-      <Navbar view={view} onNavigate={setView} />
-      {view === 'cart' ? (
-        <CartPage onContinueShopping={() => setView('list')} />
-      ) : (
-        <BookList
-          pageNumber={pageNumber}
-          pageSize={pageSize}
-          sortByTitle={sortByTitle}
-          selectedCategories={selectedCategories}
-          onPageNumberChange={setPageNumber}
-          onPageSizeChange={handlePageSizeChange}
-          onSortByTitleChange={handleSortByTitleChange}
-          onSelectedCategoriesChange={handleSelectedCategoriesChange}
+      <Navbar />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <BookList
+              pageNumber={pageNumber}
+              pageSize={pageSize}
+              sortByTitle={sortByTitle}
+              selectedCategories={selectedCategories}
+              onPageNumberChange={setPageNumber}
+              onPageSizeChange={handlePageSizeChange}
+              onSortByTitleChange={handleSortByTitleChange}
+              onSelectedCategoriesChange={handleSelectedCategoriesChange}
+            />
+          }
         />
-      )}
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/adminbooks" element={<AdminBooks />} />
+        <Route
+          path="*"
+          element={
+            <BookList
+              pageNumber={pageNumber}
+              pageSize={pageSize}
+              sortByTitle={sortByTitle}
+              selectedCategories={selectedCategories}
+              onPageNumberChange={setPageNumber}
+              onPageSizeChange={handlePageSizeChange}
+              onSortByTitleChange={handleSortByTitleChange}
+              onSelectedCategoriesChange={handleSelectedCategoriesChange}
+            />
+          }
+        />
+      </Routes>
     </CartProvider>
   )
 }
 
-type NavbarProps = {
-  view: 'list' | 'cart'
-  onNavigate: (view: 'list' | 'cart') => void
-}
-
-const Navbar = ({ view, onNavigate }: NavbarProps) => {
+const Navbar = () => {
   const { totalItems } = useCart()
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        <button
+        <NavLink
           className="navbar-brand btn btn-link text-white text-decoration-none p-0"
-          onClick={() => onNavigate('list')}
+          to="/"
         >
           Mission Bookstore
-        </button>
+        </NavLink>
         <div className="ms-auto d-flex align-items-center gap-3">
-          <button
-            className={`btn btn-sm ${view === 'list' ? 'btn-light' : 'btn-outline-light'}`}
-            onClick={() => onNavigate('list')}
+          <NavLink
+            className={({ isActive }) =>
+              `btn btn-sm ${isActive ? 'btn-light' : 'btn-outline-light'}`
+            }
+            to="/"
           >
             Books
-          </button>
-          <button
-            className={`btn btn-sm position-relative ${
-              view === 'cart' ? 'btn-light' : 'btn-outline-light'
-            }`}
-            onClick={() => onNavigate('cart')}
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              `btn btn-sm ${isActive ? 'btn-light' : 'btn-outline-light'}`
+            }
+            to="/adminbooks"
+          >
+            Admin
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              `btn btn-sm position-relative ${
+                isActive ? 'btn-light' : 'btn-outline-light'
+              }`
+            }
+            to="/cart"
           >
             <span className="d-inline-flex align-items-center gap-2">
               <svg
@@ -98,7 +126,7 @@ const Navbar = ({ view, onNavigate }: NavbarProps) => {
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
               {totalItems}
             </span>
-          </button>
+          </NavLink>
         </div>
       </div>
     </nav>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { Book } from './types/book'
-import { useCart } from './CartContext'
+import type { Book } from '../types/book'
+import { useCart } from '../CartContext'
 
 const API_BASE_URL = 'http://localhost:5151/api/books'
 const CATEGORIES_URL = `${API_BASE_URL}/categories`

@@ -1,18 +1,19 @@
-import { useCart } from './CartContext'
+import { useNavigate } from 'react-router-dom'
+import { useCart } from '../CartContext'
 
-type CartPageProps = {
-  onContinueShopping: () => void
-}
-
-function CartPage({ onContinueShopping }: CartPageProps) {
+function CartPage() {
   const { items, totalPrice, removeItem, setQuantity, clear } = useCart()
+  const navigate = useNavigate()
 
   return (
     <div className="container py-4">
       <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
         <h1 className="h3 m-0">Your Cart</h1>
         <div className="d-flex gap-2">
-          <button className="btn btn-outline-secondary" onClick={onContinueShopping}>
+          <button
+            className="btn btn-outline-secondary"
+            onClick={() => navigate('/')}
+          >
             Continue Shopping
           </button>
           {items.length > 0 && (

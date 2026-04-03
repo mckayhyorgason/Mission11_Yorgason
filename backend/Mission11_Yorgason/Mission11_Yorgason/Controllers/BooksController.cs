@@ -74,4 +74,54 @@ public class BooksController : ControllerBase
 
         return Ok(categories);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<Book>> CreateBook([FromBody] Book book)
+    {
+        _context.Books.Add(book);
+        await _context.SaveChangesAsync();
+
+        return Created($"/api/books/{book.BookId}", book);
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> UpdateBook(int id, [FromBody] Book book)
+    {
+        if (id != book.BookId)
+        {
+            return BadRequest("Book ID mismatch.");
+        }
+
+        var existing = await _context.Books.FindAsync(id);
+        if (existing == null)
+        {
+            return NotFound();
+        }
+
+        existing.Title = book.Title;
+        existing.Author = book.Author;
+        existing.Publisher = book.Publisher;
+        existing.Isbn = book.Isbn;
+        existing.Classification = book.Classification;
+        existing.Category = book.Category;
+        existing.PageCount = book.PageCount;
+        existing.Price = book.Price;
+
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteBook(int id)
+    {
+        var existing = await _context.Books.FindAsync(id);
+        if (existing == null)
+        {
+            return NotFound();
+        }
+
+        _context.Books.Remove(existing);
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
 }
